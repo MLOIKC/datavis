@@ -1,16 +1,20 @@
 <template>
-  <HelloWorld></HelloWorld>
+  <div class="intro">
+      <NarbarMenu></NarbarMenu>
+    </div>
+  <div class="main">
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import NarbarMenu from './components/NarbarMenu.vue'
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
+    name: 'App',
+    components: {
+      NarbarMenu
+    },
   }
-}
 </script>
 
 <style>
