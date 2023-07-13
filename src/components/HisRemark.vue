@@ -192,7 +192,7 @@ export default defineComponent({
                 .style('background-color', d => d.color)
                 .style('display', 'inline-block')
                 .style('margin-right', '5px')
-                .style('border', '1px solid #8e7d6b')
+                .style('border', '1px solid #8e7d6b');
             // .style('box-shadow', '1px 1px gray');
 
             items.append('span')
