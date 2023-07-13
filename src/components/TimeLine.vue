@@ -1,7 +1,10 @@
 <template>
+    <!-- <div style="text-align: center;font-family:FZYaoti;font-size:40px">李白生平时间线</div> -->
+    <div class="title1">李白生平时间线</div>
     <div id="tooltip"></div>
-    <div id="legend"></div>
+    <div id="legend" style="display:inline-block;margin-top: 20px;margin-left: 600px;font-family:FZYaoti;"></div>
     <div id="body"></div>
+    <div style="font-family: 'FZYaoti', cursive;font-size: 12px;margin-left: 1300px;">数据来源：安旗所著《李白年谱》</div>
 </template>
 
 <script>
@@ -30,7 +33,7 @@ export default defineComponent({
     methods: {
         drawGraphChart(jsonData) {
             var width = (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth) * 0.96;
-            var height = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight) * 0.96;
+            var height = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight) * 0.72;
 
 
             async function loadData() {
@@ -72,7 +75,17 @@ export default defineComponent({
                 console.log(timelines)
                 // const color = d3.scaleOrdinal(d3.schemeSet2).domain(timelines);
                 // const color = d3.scaleOrdinal(timelines,d3.schemeSet2);
-                const color = d3.scaleOrdinal(dataByTimeline.map(d => d.key), d3.schemeSet3);
+                const originalColors = ["#AE7664", "#B0997F", "#C2B088", "#D0C7A8", "#95A07C", "#A4B7B5"];
+                const colorRange = originalColors.map(color => {
+                    const c = d3.hsl(color);
+                    c.s += 0.2; // 增加饱和度
+                    c.l += 0.1; // 增加亮度
+                    return c.toString();
+                });
+                const color = d3.scaleOrdinal()
+                    .domain(timelines)
+                    .range(colorRange);
+                // const color = d3.scaleOrdinal(dataByTimeline.map(d => d.key), d3.schemeSet3);
                 data.forEach(d => d.color = d3.color(color(d.key)))
 
                 console.log(color)
@@ -97,29 +110,46 @@ export default defineComponent({
                     const isLabelRight = (sx > width / 2 ? sx + w < width : sx - w > 0);
 
                     el.style("cursor", "pointer")
+                    // 创建 filter 元素并设置其 id 属性值
+                    const defs = svg.append("defs");
+                    const filter = defs.append("filter")
+                        .attr("id", "drop-shadow")
+                        .attr("height", 1.2)
+                        .attr('width', 1.2);
 
+                    // 为 filter 元素添加 feDropShadow 滤镜
+                    filter.append("feDropShadow")
+                        .attr("dx", 2)
+                        .attr("dy", 2)
+                        .attr("stdDeviation", 1)
+                        .attr("flood-color", "#999")
+                        .attr("flood-opacity", "0.8");
                     el
                         .append("rect")
                         .attr("x", sx)
                         .attr("height", y.bandwidth())
                         .attr("width", w)
-                        .attr("fill", d.color);
+                        .attr("fill", d.color).attr("filter", "url(#drop-shadow)")
+                        .attr("stroke", "#8e7d6b")
+                        .attr("stroke-width", 1);
 
                     el
                         .append("text")
                         .text(d.civilization)
                         .attr("x", isLabelRight ? sx - 5 : sx + w + 5)
-                        .attr("y", 2.5)
+                        .attr("y", 1.4)
                         .attr("fill", "black")
                         .style("text-anchor", isLabelRight ? "end" : "start")
-                        .style("dominant-baseline", "hanging");
+                        .style("dominant-baseline", "hanging")
+                        .style("font-family", "FZYaoti")
+                        .style("font-size", 11);
                 }
                 function getTooltipContent(d) {
-                    return `<b style="color:${d.color.darker()};font-size:20px">${d.timeline}</b>
+                    return `<b style="color:${d.color};font-size:15px;font-family:FZYaoti;">${d.timeline}</b>
 <br/>
-<div style="font-size:20px">${d.region}</div>
+<div style="font-size:15px;font-family:FZYaoti;">${d.region}</div>
 <br/>
-<div style="font-size:20px">${formatDate(d.start)} - ${formatDate(d.end)}</div>
+<div style="font-size:15px;font-family:FZYaoti;">${formatDate(d.start)} - ${formatDate(d.end)}</div>
 `
                 }
 
@@ -154,7 +184,7 @@ export default defineComponent({
                 //     .attr("transform", (d, i) => `translate(${margin.left},${y(i) + margin.top})`)
                 //     .each(getRect)
 
-                const g = svg.append("g").attr("transform",`translate(${margin.left} ${margin.top})`);
+                const g = svg.append("g").attr("transform", `translate(${margin.left} ${margin.top})`);
 
                 const groups = g
                     .selectAll("g")
@@ -229,6 +259,14 @@ li {
 a {
     color: #42b983;
     text-decoration: none;
+}
+
+.title1 {
+    font-family: "FZYaoti", cursive;
+    font-size: 45px;
+    margin-top: 20px;
+    margin-left: 600px;
+    text-shadow: 0 1px 0 #aaa, 1px 1px 0 rgb(147, 114, 64);
 }
 </style>
   

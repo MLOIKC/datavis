@@ -1,7 +1,9 @@
 <template>
+  <div class="title1">李白所写诗词高频词词云图</div>
   <div id="tooltip"></div>
   <div id="legend"></div>
   <div id="drawpic" class="drawpic"></div>
+  <div style="font-family: 'FZYaoti', cursive;font-size: 12px;margin-left: 1240px;margin-bottom: 20px;">数据来源：<a href="https://github.com/chinese-poetry/chinese-poetry">中华古典文集数据库chinese-poetry</a></div>
 </template>
 
 <script>
@@ -55,7 +57,16 @@ export default defineComponent({
         torch_size.push(item.size);
       });
 
-      var fill = d3.scaleOrdinal().range(d3.schemeSet3);
+      const originalColors = ["#AE7664", "#B0997F", "#C2B088", "#D0C7A8", "#95A07C", "#A4B7B5"];
+      const colorRange = originalColors.map(color => {
+        const c = d3.hsl(color);
+        c.s += 0.2; // 增加饱和度
+        c.l += 0.1; // 增加亮度
+        return c.toString();
+      });
+      // var fill = d3.scaleOrdinal().range(d3.schemeSet3);
+      var fill = d3.scaleOrdinal().range(colorRange);
+
 
       var scaleSize = d3.scaleSqrt()
         .domain([0, d3.max(words_list, function (d) { return d.size; })])
@@ -63,7 +74,7 @@ export default defineComponent({
 
       var layout = cloud().size([width, height * 0.9])
         .words(words_list)
-        .padding(1)
+        .padding(2)
         .rotate(function () { return ~~(Math.random() * 2) * 0; })
         .font("Impact")
         .fontSize(function (d) { return scaleSize(d.size); }) // 使用 scaleSize 计算字体大小
@@ -77,7 +88,8 @@ export default defineComponent({
           .style("font-family", "FZYaoti").style("fill", function (d, i) { return fill(i); })
           .attr("text-anchor", "middle").attr("transform", function (d) {
             return "translate(" + [d.x - 2, d.y] + ")rotate(" + d.rotate + ")";
-          }).text(function (d) { return d.text; }).attr("opacity", 0.9).style("font-weight", "bold").style("filter", "drop-shadow(2px 2px 0px #8e7d6b");
+          }).text(function (d) { return d.text; }).attr("opacity", 0.9).style("font-weight", "bold").style("filter", "drop-shadow(2px 2px 0px #8e7d6b")
+          .style("text-shadow", "0.5px 0 #8e7d6b, 0 0.5px #8e7d6b, -0.5px 0 white, 0 -0.5px #8e7d6b");
       }
     }
   }
@@ -108,5 +120,13 @@ li {
 a {
   color: #42b983;
   text-decoration: none;
+}
+
+.title1 {
+  font-family: "FZYaoti", cursive;
+  font-size: 45px;
+  margin-top: 20px;
+  margin-left: 480px;
+  text-shadow: 0 1px 0 #aaa, 1px 1px 0 rgb(147, 114, 64);
 }
 </style>

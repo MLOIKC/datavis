@@ -4,7 +4,7 @@
     <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" background-color="#545c64"
       text-color="#fff" active-text-color="#CCBD99" @select="handleSelect" style="font-family:FZYaoti;height: 65px;">
       <el-menu-item style="margin-left:10px">
-        <div style="font-size:20px;font-weight: bold;">李白可视化平台</div>
+        <div style="font-size:20px;font-weight: bold;">李白数据可视化平台</div>
       </el-menu-item>
       <el-menu-item index="/intro" style="margin-left:10px">
         <div style="font-size:16px;">个人简介</div>
@@ -20,8 +20,8 @@
       </el-menu-item>
       <el-sub-menu index="/wordcloud">
         <template #title><div style="font-size:17px;">诗词统计</div></template>
-        <el-menu-item index="/wordcloud"><div style="font-size:17px;font-family:FZYaoti;">诗词标签词云</div></el-menu-item>
-        <el-menu-item index="/tagcloud"><div style="font-size:17px;font-family:FZYaoti;">诗词词频词云</div></el-menu-item>
+        <el-menu-item index="/tagcloud"><div style="font-size:17px;font-family:FZYaoti;">诗词主题词云</div></el-menu-item>
+        <el-menu-item index="/wordcloud"><div style="font-size:17px;font-family:FZYaoti;">诗词词频词云</div></el-menu-item>
       </el-sub-menu>
       <el-menu-item index="/remark">
         <div style="font-size:17px;">历史评价</div>
@@ -29,7 +29,7 @@
       <el-menu-item index="/baiduindex">
         <div style="font-size:17px;">百度指数</div>
       </el-menu-item>
-      <el-menu-item index="/" style="margin-left:440px">
+      <el-menu-item index="/" style="margin-left:400px">
         <div style="font-size:17px;">返回首页</div>
       </el-menu-item>
     </el-menu>

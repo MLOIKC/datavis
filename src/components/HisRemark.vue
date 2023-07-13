@@ -1,4 +1,5 @@
 <template>
+    <div class="title1">他人对李白历史评价</div>
     <div id="remark" style="display:inline-block;"></div>
     <div id="tooltip" style="display:inline-block;"></div>
     <div id="legend" style="display:inline-block;margin-top: 20px;margin-left: 600px;font-family:FZYaoti;"></div>
@@ -90,11 +91,33 @@ export default defineComponent({
 `
             }
 
-            const colorInterpolator = d3.interpolateRgb("#A1906E", "#EDDFC4");
-            const colorRange = d3.quantize(colorInterpolator, Array.from(new Set(data.map(d => d.group))).length);
+            // const colorInterpolator = d3.interpolateRgb("#A1906E", "#EDDFC4");
+            // const colorRange = d3.quantize(colorInterpolator, Array.from(new Set(data.map(d => d.group))).length);
+            // const color = d3.scaleOrdinal(data.map(d => d.group), colorRange);
+            // data.forEach(d => d.color = d3.color(color(d.group)));
 
-            const color = d3.scaleOrdinal(data.map(d => d.group), colorRange);
-            data.forEach(d => d.color = d3.color(color(d.group)));
+            // const colorRange = ["#AE7664", "#B0997F", "#C2B088", "#D0C7A8", "#95A07C", "#A4B7B5"];
+            // const color = d3.scaleOrdinal()
+            //     .domain(data.map(d => d.group))
+            //     .range(colorRange);
+            // data.forEach(d => d.color = color(d.group));
+
+            const originalColors = ["#AE7664", "#B0997F", "#C2B088", "#D0C7A8", "#95A07C", "#A4B7B5"];
+            const colorRange = originalColors.map(color => {
+                const c = d3.color(color);
+                c.r += 20; // 增加红色分量
+                c.g += 20; // 增加绿色分量
+                c.b += 20; // 增加蓝色分量
+                return c.toString();
+            });
+            const color = d3.scaleOrdinal()
+                .domain(data.map(d => d.group))
+                .range(colorRange);
+            data.forEach(d => d.color = color(d.group));
+
+            // const color = d3.scaleOrdinal(data.map(d => d.group), d3.schemePastel1);
+            // data.forEach(d => d.color = d3.color(color(d.group)));
+
 
             const tooltip = d3.select("#tooltip").call(createTooltip);
 
@@ -130,7 +153,7 @@ export default defineComponent({
                 .attr("fill-opacity", 0.9)
                 .attr("fill", d => color(d.data.group))
                 .attr("stroke", "#8e7d6b")
-                .attr("stroke-width", 1);
+                .attr("stroke-width", 1)
 
 
             leaf.append("clipPath")
@@ -145,8 +168,10 @@ export default defineComponent({
                 .join("tspan")
                 .attr("x", 0)
                 .attr("y", (d, i, nodes) => `${i - nodes.length / 2 + 0.8}em`)
-                .attr("font-size",d=>d.r/2)
-                .text(d => d.data.name.split(/(?=[A-Z][a-z])|\s+/g));
+                .attr("font-size", d => d.r / 2)
+                .text(d => d.data.name.split(/(?=[A-Z][a-z])|\s+/g))
+                .attr("fill", "#fff")
+                .style("filter", "drop-shadow(2px 2px 0px #8e7d6b");
 
 
             leaf.on('mouseover', function (event, d) {
@@ -192,12 +217,13 @@ export default defineComponent({
                 .style('background-color', d => d.color)
                 .style('display', 'inline-block')
                 .style('margin-right', '5px')
-                .style('border', '1px solid #8e7d6b');
+                .style('border', '1px solid #8e7d6b')
             // .style('box-shadow', '1px 1px gray');
 
             items.append('span')
                 .text(d => d.group)
-                .style('margin-right', '10px');
+                .style('margin-right', '10px')
+                .style('');
 
         }
     },
@@ -229,6 +255,14 @@ li {
 a {
     color: #42b983;
     text-decoration: none;
+}
+
+.title1 {
+    font-family: "FZYaoti", cursive;
+    font-size: 45px;
+    margin-top: 20px;
+    margin-left: 550px;
+    text-shadow: 0 1px 0 #aaa, 1px 1px 0 rgb(147, 114, 64);
 }
 </style>
   

@@ -1,5 +1,7 @@
 <template>
+    <div class="title1">2013-2023年十大唐代诗人网络热度指数排行榜</div>
     <div id="hist"></div>
+    <div style="font-family: 'FZYaoti', cursive;font-size: 12px;margin-left: 1340px;">数据来源：百度指数</div>
 </template>
 
 <script>
@@ -43,11 +45,11 @@ export default defineComponent({
             var svg = d3.select("#hist")			//选择<body>
                 .append("svg")			//在<body>中添加<svg>
                 .attr("width", width)	//设定<svg>的宽度属性
-                .attr("height", height);
+                .attr("height", height * 0.8);
 
             var scale = d3.scaleLinear()
                 .domain([0, 120])
-                .range([10, width * 0.7]);
+                .range([10, width * 0.6]);
 
             // 每次取出一个元素 依数值大小将 entities 进行排序
             var index = 0;
@@ -59,18 +61,34 @@ export default defineComponent({
             // 右下角年份
             var comment = svg.append("text")
                 .attr("x", width * 0.8)
-                .attr("y", maxHeight)
+                .attr("y", maxHeight+60)
                 .attr("fill", "grey")
                 .attr("font-size", "40")
+                .style("font-family", "FZYaoti")
                 .text(dataEntry.year);
 
-            var color = d3.schemeSet3;
+            // var color = d3.schemeSet3;
+            const originalColors = ["#AE7664", "#B0997F", "#C2B088", "#95A07C", "#A4B7B5"];
+            const colorRange = originalColors.map(color => {
+                const c = d3.hsl(color);
+                c.s += 0.2; // 增加饱和度
+                c.l += 0.1; // 增加亮度
+                return c.toString();
+            });
+            const colorRange2 = originalColors.map(color => {
+                const c = d3.color(color);
+                c.r += 20; // 增加红色分量
+                c.g += 20; // 增加绿色分量
+                c.b += 20; // 增加蓝色分量
+                return c.toString();
+            });
+            const color = colorRange.concat(colorRange2);
             //绑定该年数据
             var rects = svg.selectAll("rect")
                 .data(dataValue)
                 .enter()
                 .append("rect")
-                .attr("x", 50+150)
+                .attr("x", 50 + 250)
                 .attr("height", rect.height)
                 .attr("fill", (d, i) => color[i % 10]);
 
@@ -81,7 +99,7 @@ export default defineComponent({
                 .data(dataValue)
                 .enter()
                 .append("text")
-                .attr("x", +150)
+                .attr("x", +230)
 
 
             svg.append("g")
@@ -99,20 +117,23 @@ export default defineComponent({
                 rects.data(dataValue, d => d.name)
                     .transition()
                     .duration(900)
-                    .attr("y", (_, i) => rect.height * i)
+                    .attr("y", (_, i) => rect.height * i + 70)
                     .attr("width", d => scale(d.value) / 120)
 
                 labels.data(dataValue, d => d.name)
                     .transition()
                     .duration(900)
-                    .attr("y", (_, i) => (rect.height) * i + rect.height / 2 + 4)
+                    .attr("y", (_, i) => (rect.height) * i + rect.height / 2 + 4 + 70)
+                    .attr("font-size", 20)
+                    .style("font-family", "FZYaoti")
                     .text(d => d.name);
 
                 number.data(dataValue, d => d.name)
                     .transition()
                     .duration(900)
-                    .attr("x", d => scale(d.value) / 150 + 25+150)
-                    .attr("y", (_, i) => (rect.height) * i + rect.height / 2 + 4)
+                    .attr("x", d => scale(d.value) / 120 + 10 + 250)
+                    .attr("y", (_, i) => (rect.height) * i + rect.height / 2 + 4 + 70)
+                    .style("font-family", "FZYaoti")
                     .text(d => d.value);
             }
 
@@ -121,7 +142,7 @@ export default defineComponent({
             function update(i) {
                 dataEntry = data[i];
                 dataValue = dataEntry["entities"].sort((x, y) => y.value - x.value);
-                comment.text(dataEntry.time);
+                comment.text(dataEntry.time + "年");
                 updateElements();
             }
 
@@ -154,6 +175,14 @@ li {
 a {
     color: #42b983;
     text-decoration: none;
+}
+
+.title1 {
+    font-family: "FZYaoti", cursive;
+    font-size: 45px;
+    margin-top: 20px;
+    margin-left: 300px;
+    text-shadow: 0 1px 0 #aaa, 1px 1px 0 rgb(147, 114, 64);
 }
 </style>
   

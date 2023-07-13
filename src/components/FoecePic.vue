@@ -1,7 +1,8 @@
 <template>
-    <h1 style="text-align: center;font-size:35px">李白相关人物关系图</h1>
+    <div class="title1">李白相关人物关系图</div>
     <div id="body"></div>
     <div id="tooltip"></div>
+    <div style="font-family: 'FZYaoti', cursive;font-size: 12px;margin-left: 1300px;margin-bottom: 20px;">数据来源：<a href="https://www.allhistory.com/relation?id=580716f70bd1be8d718b4567">全历史网站官方数据</a></div>
 </template>
 
 <script>
@@ -17,7 +18,7 @@ export default defineComponent({
         drawGraphChart() {
 
             var width = (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth) * 0.96;
-            var height = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight) * 0.9;
+            var height = (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight) * 0.8;
             var svg = d3.select("#body")			//选择<body>
                 .append("svg")			//在<body>中添加<svg>
                 .attr("width", width)	//设定<svg>的宽度属性
@@ -91,16 +92,19 @@ export default defineComponent({
                     .attr("stroke-width", "1.5px")
                     .attr("marker-end", "url(#arrow)");
 
-                // var pathtext = svg.selectAll('g')
-                //     .data(edges)
-                //     .enter()
-                //     .append("text")
-                //     .append('textPath')
-                //     .attr("text-anchor", "middle")//居中
-                //     .attr("startOffset", "50%")
-                //     .attr('xlink:href', function (d, i) { return "#edgepath" + i; })
-                //     .style("font-size", "13px")
-                //     .text(function (d) { return d.relation; });
+                var pathtext = svg.selectAll('g')
+                    .data(edges)
+                    .enter()
+                    .append("text")
+                    .append('textPath')
+                    .attr("text-anchor", "middle")//居中
+                    .attr("startOffset", "50%")
+                    .attr('xlink:href', function (d, i) { return "#edgepath" + i; })
+                    .style("font-size", "18px")
+                    .style("font-family", "FZYaoti")
+                    .text(function (d) { return d.relation; });
+
+                console.log(pathtext)
 
 
                 var circles = svg.selectAll("forceCircle")
@@ -135,11 +139,11 @@ export default defineComponent({
                     .attr("class", "forceText")
                     .attr("x", function (d) { return d.x; })
                     .attr("y", function (d) { return d.y; })
-                    .attr("fill","#fff")
+                    .attr("fill","white")
                     .style("font-family", "FZYaoti")
                     .style("font-size", d => d.weight * 2 + 13)
                     .style("font-weight", "bold")
-                    .style("filter", "drop-shadow(2px 2px 0px #8e7d6b")
+                    .style("filter", "drop-shadow(2px 2px 0px rgb(147, 114, 64)")
                     .attr("dx", "-1.5em")
                     .attr("dy", "3em")
                     .text(function (d) { return d.name; });
@@ -225,5 +229,13 @@ a {
     color: #42b983;
     text-decoration: none;
 }
+
+.title1 {
+    font-family: "FZYaoti", cursive;
+    font-size: 45px;
+    margin-top: 20px;
+    margin-left: 550px;
+    text-shadow: 0 1px 0 #aaa, 1px 1px 0 rgb(147, 114, 64);
+  }
 </style>
   
